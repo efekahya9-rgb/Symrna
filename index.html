@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Smyrna Karakter Oluşturucu</title>
+<style>
+:root{--bg:#0e0e10;--card:#1c1c20;--line:#3a3a42;--fg:#f3f3f5;--mute:#9a9aa5;--acc:#e8b04a;--accfg:#1a1200;--ok:#3ecf74;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#f6f3ee;--card:#ffffff;--line:#d6d0c4;--fg:#1b1a17;--mute:#6d675b;--acc:#a9690b;--accfg:#fff}}
+:root[data-theme="light"]{--bg:#f6f3ee;--card:#ffffff;--line:#d6d0c4;--fg:#1b1a17;--mute:#6d675b;--acc:#a9690b;--accfg:#fff}
+:root[data-theme="dark"]{--bg:#0e0e10;--card:#1c1c20;--line:#3a3a42;--fg:#f3f3f5;--mute:#9a9aa5;--acc:#e8b04a;--accfg:#1a1200}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:17px/1.4 -apple-system,system-ui,"Segoe UI",Roboto,sans-serif}
+main{max-width:560px;margin:0 auto;padding:18px 16px 40px}
+h1{font-size:24px;margin:0 0 4px}
+h1 small{font-size:12px;font-weight:500;background:var(--card);border:1px solid var(--line);border-radius:99px;padding:3px 10px;vertical-align:middle;margin-left:6px;color:var(--mute)}
+h2{font-size:18px;margin:26px 0 10px}
+.note{color:var(--mute);font-size:14px;margin:6px 0 0}
+input[type=text]{width:100%;background:transparent;color:var(--fg);border:1px solid var(--line);border-radius:14px;padding:14px 16px;font-size:17px}
+.opt{display:flex;align-items:center;gap:12px;padding:10px 4px;cursor:pointer}
+.opt i{width:26px;height:26px;border-radius:50%;border:2px solid var(--line);flex:none;display:grid;place-items:center}
+.opt.on i{border-color:var(--fg);background:var(--fg)}
+.opt.on i:after{content:"";width:9px;height:9px;border-radius:50%;background:var(--bg)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cls{background:transparent;color:var(--fg);text-align:left;border:1px solid var(--line);border-radius:14px;padding:12px 14px;font:inherit;cursor:pointer}
+.cls b{display:block}.cls span{font-size:13px;color:var(--mute)}
+.cls.on{background:var(--card);border-color:var(--fg);box-shadow:inset 0 0 0 1px var(--fg)}
+.ab{background:var(--card);border-radius:14px;padding:12px 14px;margin-top:10px;font-size:15px}
+.ab b{display:block;color:var(--acc)}
+.row{display:flex;align-items:center;gap:6px;margin:8px 0}
+.row label{flex:1;font-weight:600}
+.row button{width:52px;height:42px;border-radius:99px;border:1px solid var(--line);background:transparent;color:var(--fg);font:inherit;font-size:16px;cursor:pointer}
+.row button.on{background:var(--fg);color:var(--bg);font-weight:700}
+.sheet{background:var(--card);border-radius:20px;padding:18px;margin-top:26px;border:1px solid var(--line)}
+.sheet h3{margin:0;font-size:24px}
+.sheet .sub{color:var(--mute);font-size:14px;margin:4px 0 14px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);text-align:center;border-bottom:1px solid var(--line);padding-bottom:14px}
+.stats b{display:block;font-size:30px}.stats span{color:var(--mute);font-size:13px}
+.vit{display:flex;justify-content:space-between;margin-top:14px;font-size:19px}
+.wp{margin-top:8px;font-size:16px}
+.want{margin-top:8px;color:var(--mute);font-size:14px;font-style:italic}
+.btn{width:100%;margin-top:12px;border:0;border-radius:99px;padding:15px;font:inherit;font-weight:600;background:var(--fg);color:var(--bg);cursor:pointer}
+.btn.acc{background:var(--acc);color:var(--accfg)}
+.btn.ghost{background:transparent;color:var(--fg);border:1px solid var(--line)}
+.btn:disabled{opacity:.4}
+.msg{min-height:22px;text-align:center;color:var(--ok);font-size:14px;margin-top:8px}
+.saved{display:flex;align-items:center;gap:8px;background:var(--card);border-radius:14px;padding:10px 12px;margin-top:8px}
+.saved div{flex:1;min-width:0}.saved small{color:var(--mute);display:block}
+.saved button{background:transparent;border:1px solid var(--line);color:var(--fg);border-radius:10px;padding:6px 10px;font:inherit;font-size:14px;cursor:pointer}
+</style>
+</head>
+<body>
+<main>
+<h1>Smyrna Karakter Oluşturucu <small>5 dakika</small></h1>
+
+<h2>1. Karakterinin adı</h2>
+<input type="text" id="name" placeholder="Örn. Thoran, Nyx, Mira..." maxlength="30" autocomplete="off">
+
+<h2>2. Hangi ırktan?</h2>
+<div id="races"></div>
+<p class="note">Irklar bu basit sistemde mekanik bonus vermiyor. Sadece karakterin görünüşünü ve hikâyesini etkiliyor.</p>
+
+<h2>3. Hangi mesleği seçiyorsun?</h2>
+<div class="grid" id="classes"></div>
+<div class="ab" id="ability"></div>
+
+<h2>4. Yetenek puanlarını dağıt</h2>
+<p class="note" style="margin-top:0">Her bonusu yalnızca bir kez kullanabilirsin. Toplamda +3, +2, +1, +0 dağıtılmış olmalı.</p>
+<div id="stats"></div>
+
+<h2>5. Karakterinin kişiliği</h2>
+<div id="pers"></div>
+<h2 style="font-size:16px;color:var(--mute)">Karakterin ne istiyor? (İsteğe bağlı)</h2>
+<input type="text" id="want" placeholder="Örn. Zengin olmak, ünlü olmak..." maxlength="60" autocomplete="off">
+
+<div class="sheet" id="sheet"></div>
+<button class="btn acc" id="copy">Karakter kâğıdını kopyala</button>
+<button class="btn ghost" id="share">Paylaş</button>
+<button class="btn ghost" id="save">Bu cihaza kaydet</button>
+<div class="msg" id="msg"></div>
+
+<h2 id="sh" style="display:none">Kayıtlı karakterler</h2>
+<div id="saved"></div>
+<p class="note" style="text-align:center;margin-top:24px">Bu oluşturucu tamamen bizim basitleştirilmiş sistemimiz içindir, resmî D&amp;D karakter kurallarını kullanmaz.</p>
+</main>
+<script>
+const RACES=[["İnsan","Uyumlu ve meraklı"],["Elf","Zarif ve uzun ömürlü"],["Cüce","Dayanıklı ve zanaatkâr"],["Buçukluk","Küçük, çevik ve şanslı"],["Yarı Ork","Güçlü ve heybetli"]];
+const CLASSES=[
+{n:"Savaşçı",d:"Kılıç ve kalkan kullanır",hp:14,def:14,w:"Kılıç",dmg:"1d8",a:"Kalkan Duruşu",at:"Bir saldırıyı engeller. Macera boyunca 2 kez kullanılabilir."},
+{n:"Hırsız",d:"Gizlenir, kilit açar",hp:10,def:13,w:"Hançer",dmg:"1d6",a:"Gölge Adımı",at:"Fark edilmeden bir yere süzülür. Macera boyunca 2 kez kullanılabilir."},
+{n:"Büyücü",d:"Büyülü enerji kullanır",hp:10,def:12,w:"Asa",dmg:"1d6",a:"Büyülü Kıvılcım",at:"Uzak hedefe saldırabilir. Macera boyunca 2 kez kullanılabilir."},
+{n:"Şifacı",d:"Dostlarını iyileştirir",hp:12,def:12,w:"Gürz",dmg:"1d6",a:"Şifalı Dokunuş",at:"Bir dostunun canını 1d6 yeniler. Macera boyunca 2 kez kullanılabilir."},
+{n:"Okçu",d:"Uzaktan saldırır",hp:11,def:13,w:"Yay",dmg:"1d8",a:"İsabetli Atış",at:"Bir atışı otomatik isabet ettirir. Macera boyunca 2 kez kullanılabilir."}];
+const STATS=["Güç","Sosyallik","Zeka","Çeviklik"];
+const PERS=["Cesur ama düşüncesiz","Zeki ama korkak","Açgözlü ama sadık","Meraklı ve sakar","Sessiz ve gizemli"];
+const S={name:"",race:2,cls:2,st:[3,0,1,2],pers:0,want:""};
+const $=id=>document.getElementById(id);
+const esc=s=>s.replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+const fmt=v=>v==null?"–":"+"+v;
+function radios(el,items,key,label){
+  el.innerHTML=items.map((x,i)=>`<div class="opt ${S[key]==i?"on":""}" data-i="${i}"><i></i><span>${label(x)}</span></div>`).join("");
+  el.onclick=e=>{const o=e.target.closest(".opt");if(!o)return;S[key]=+o.dataset.i;render()};
+}
+function render(){
+  radios($("races"),RACES,"race",r=>`${r[0]} — ${r[1]}`);
+  radios($("pers"),PERS,"pers",p=>p);
+  $("classes").innerHTML=CLASSES.map((c,i)=>`<button class="cls ${S.cls==i?"on":""}" data-i="${i}"><b>${c.n}</b><span>${c.d}</span></button>`).join("");
+  $("classes").onclick=e=>{const o=e.target.closest(".cls");if(!o)return;S.cls=+o.dataset.i;render()};
+  const c=CLASSES[S.cls];
+  $("ability").innerHTML=`<b>${c.a}</b>${c.at}`;
+  $("stats").innerHTML=STATS.map((n,i)=>`<div class="row"><label>${n}</label>${[0,1,2,3].map(v=>`<button class="${S.st[i]===v?"on":""}" data-s="${i}" data-v="${v}">+${v}</button>`).join("")}</div>`).join("");
+  $("stats").onclick=e=>{const b=e.target.closest("button");if(!b)return;
+    const s=+b.dataset.s,v=+b.dataset.v,o=S.st.indexOf(v),old=S.st[s];
+    if(o>-1&&o!==s)S.st[o]=old;S.st[s]=v;render()};
+  const full=S.st.every(v=>v!=null);
+  const nm=S.name.trim()||"İsimsiz Kahraman";
+  $("sheet").innerHTML=`<h3>${esc(nm)}</h3><div class="sub">${RACES[S.race][0]} • ${c.n} • ${PERS[S.pers]}</div>
+  <div class="stats">${STATS.map((n,i)=>`<div><b>${fmt(S.st[i])}</b><span>${n}</span></div>`).join("")}</div>
+  <div class="vit"><span>Can: <b>${c.hp}/${c.hp}</b></span><span>Savunma: <b>${c.def}</b></span></div>
+  <div class="wp">Silah: ${c.w} • Hasar: ${c.dmg}</div>
+  <div class="wp">Özel Yetenek: <b>${c.a}</b> – ${c.at}</div>
+  ${S.want.trim()?`<div class="want">İstediği: ${esc(S.want.trim())}</div>`:""}`;
+  ["copy","share","save"].forEach(id=>$(id).disabled=!full);
+  $("msg").textContent=full?"":"Önce dört yeteneğe de +0, +1, +2, +3 dağıt.";
+}
+function text(ch){
+  ch=ch||S;const c=CLASSES[ch.cls];
+  return `⚔️ ${ch.name.trim()||"İsimsiz Kahraman"}\n${RACES[ch.race][0]} • ${c.n} • ${PERS[ch.pers]}\n`+
+  STATS.map((n,i)=>`${n} ${fmt(ch.st[i])}`).join(" | ")+`\nCan: ${c.hp}/${c.hp} | Savunma: ${c.def}\nSilah: ${c.w} (${c.dmg})\nÖzel Yetenek: ${c.a} – ${c.at}`+(ch.want.trim()?`\nİstediği: ${ch.want.trim()}`:"")+`\n(Smyrna FRP)`;
+}
+function say(t){$("msg").textContent=t;setTimeout(()=>{if($("msg").textContent===t)$("msg").textContent=""},2500)}
+async function copy(t){
+  try{await navigator.clipboard.writeText(t);return true}catch(e){}
+  try{const a=document.createElement("textarea");a.value=t;a.style.position="fixed";a.style.opacity="0";document.body.appendChild(a);a.select();const ok=document.execCommand("copy");a.remove();return ok}catch(e){return false}
+}
+$("name").oninput=e=>{S.name=e.target.value;render()};
+$("want").oninput=e=>{S.want=e.target.value;render()};
+$("copy").onclick=async()=>say(await copy(text())?"Karakter kâğıdı kopyalandı ✓":"Kopyalanamadı");
+$("share").onclick=async()=>{
+  if(navigator.share){try{await navigator.share({text:text()});return}catch(e){if(e.name==="AbortError")return}}
+  say(await copy(text())?"Paylaşım açılmadı, metin kopyalandı ✓":"Paylaşılamadı");
+};
+function load(){try{return JSON.parse(localStorage.getItem("smyrna")||"[]")}catch(e){return[]}}
+function store(l){try{localStorage.setItem("smyrna",JSON.stringify(l));return true}catch(e){return false}}
+function list(){
+  const l=load();$("sh").style.display=l.length?"block":"none";
+  $("saved").innerHTML=l.map((c,i)=>`<div class="saved"><div><b>${esc(c.name.trim()||"İsimsiz Kahraman")}</b><small>${RACES[c.race][0]} • ${CLASSES[c.cls].n}</small></div><button data-a="open" data-i="${i}">Aç</button><button data-a="cp" data-i="${i}">Kopyala</button><button data-a="del" data-i="${i}">Sil</button></div>`).join("");
+}
+$("saved").onclick=async e=>{const b=e.target.closest("button");if(!b)return;
+  const l=load(),i=+b.dataset.i,c=l[i];if(!c)return;
+  if(b.dataset.a==="del"){l.splice(i,1);store(l);list()}
+  else if(b.dataset.a==="open"){Object.assign(S,c);$("name").value=S.name;$("want").value=S.want;render();window.scrollTo({top:0,behavior:"smooth"})}
+  else say(await copy(text(c))?"Kopyalandı ✓":"Kopyalanamadı")};
+$("save").onclick=()=>{const l=load();l.unshift(JSON.parse(JSON.stringify(S)));
+  say(store(l.slice(0,20))?"Kaydedildi ✓":"Bu tarayıcıda kaydedilemedi");list()};
+render();list();
+</script>
+</body>
+</html>
